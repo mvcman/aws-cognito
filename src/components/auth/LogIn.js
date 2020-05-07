@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
+import { Auth } from 'aws-amplify';
 
 class LogIn extends Component {
   state = {
@@ -34,6 +35,21 @@ class LogIn extends Component {
     }
 
     // AWS Cognito integration here
+    const { username, password } = this.state;
+    try {
+        const loginResponse = await Auth.signIn(username, password);
+        console.log(loginResponse);
+        this.props.history.push('/');
+    }catch(err){
+        let error = null;
+        !err.message ? error = { "message": err } : error = err;
+        this.setState({
+            errors: {
+                ...this.state.errors,
+                cognito: error
+            }
+        });
+    }
   };
 
   onInputChange = event => {
