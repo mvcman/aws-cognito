@@ -39,6 +39,8 @@ class LogIn extends Component {
     try {
         const loginResponse = await Auth.signIn(username, password);
         console.log(loginResponse);
+        this.props.auth.setAuthStatus(true);
+        this.props.auth.setUser(loginResponse);
         this.props.history.push('/');
     }catch(err){
         let error = null;
